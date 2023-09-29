@@ -476,3 +476,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 webapi\appsettings.json
+/appsettings.Development.json
+/appsettings.json
+/WeatherForecast.cs
+/libman.json
