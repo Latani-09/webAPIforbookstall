@@ -33,8 +33,8 @@ namespace webapi.Data
 
 
 
-            var dbInitializer = new DbInitializer(builder);
-           dbInitializer.Seed(builder);
+      //      var dbInitializer = new DbInitializer(builder);
+       //    dbInitializer.Seed(builder);
 
 
 
