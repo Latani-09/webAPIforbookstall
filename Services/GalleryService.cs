@@ -9,49 +9,49 @@ namespace webapi.Services
 {
     public class GalleryService:IGalleryService
     {
-        private readonly DataContext _movieContext;
+        private readonly DataContext _bookcontext;
         public GalleryService(DataContext dataContext)
         {
-            _movieContext= dataContext;
+            _bookcontext= dataContext;
  
         }
-        public async Task<int> CreateMovieAsync(bookDTO movie)
+        public async Task<int> CreatebookAsync(bookDTO book)
         {
 
-            if (movie == null || string.IsNullOrEmpty(movie?.Title)) // checks Product valid
-                throw new Exception("invalid name for movie");
+            if (book == null || string.IsNullOrEmpty(book?.Title)) // checks Product valid
+                throw new Exception("invalid name for book");
 
-            if (await ismovieExist(movie.Title))
-                throw new Exception("The movie already exists with the same name. add some more details");
+            if (await isbookExist(book.Title))
+                throw new Exception("The book already exists with the same name. add some more details");
 
-            var movieToCreate = new Movie
+            var bookToCreate = new Book
             {
-                Title = movie.Title,
-                Author = movie.Author,
-                Price = movie.Price,
-                year = movie.year,
+                Title = book.Title,
+                Author = book.Author,
+                Price = book.Price,
+                year = book.year,
 
 
 
             };
             
-            await _movieContext.Movies.AddAsync(movieToCreate);
-            await _movieContext.SaveChangesAsync();     // create client           
+            await _bookcontext.Books.AddAsync(bookToCreate);
+            await _bookcontext.SaveChangesAsync();     // create client           
 
             return 1;
         }
 
-        private async Task<bool> ismovieExist(string name)
+        private async Task<bool> isbookExist(string name)
         {
-            return await _movieContext.Movies.AnyAsync(x => x.Title == name);
+            return await _bookcontext.Books.AnyAsync(x => x.Title == name);
         }
-        public async Task<List<Movie>> GetAllMoviesAsync()
+        public async Task<List<Book>> GetAllbooksAsync()
         {
-            return await _movieContext.Movies.ToListAsync();
+            return await _bookcontext.Books.ToListAsync();
 
 
         }
-        public async Task<bool> UpdateMovieAsync(bookDTO movie)
+        public async Task<bool> UpdatebookAsync(bookDTO book)
 
         {
 
@@ -61,43 +61,42 @@ namespace webapi.Services
             //  throw new Exception("The Product already exists with the same name");
 
 
-            var tobeUpdated = await _movieContext.Movies.FirstOrDefaultAsync(x => x.Id == movie.Id);
+            var tobeUpdated = await _bookcontext.Books.FirstOrDefaultAsync(x => x.Id == book.Id);
             if (tobeUpdated == null) // checks Product valid
             {
-                throw new Exception("can't add enter valid movie name add more details if duplicate exist");
+                throw new Exception("can't add enter valid book name add more details if duplicate exist");
             }
-            tobeUpdated.Title = movie.Title;
-            _movieContext.Movies.Update(tobeUpdated);
-            await _movieContext.SaveChangesAsync();
+            tobeUpdated.Title = book.Title;
+            _bookcontext.Books.Update(tobeUpdated);
+            await _bookcontext.SaveChangesAsync();
 
             return true;
         }
         
-        public async Task<Movie> GetMovieAsync(Guid id)
+        public async Task<Book> GetbookAsync(Guid id)
         {
 
-            var movie = await _movieContext.Movies
+            var book = await _bookcontext.Books
                                                     .SingleOrDefaultAsync(s => s.Id== id);
-            Console.WriteLine(movie.Title);
-            if (movie == null)
+            Console.WriteLine(book.Title);
+            if (book == null)
             {
                 throw new Exception($"not found ");
             }
-
-            return movie;
+            return book;
         }
-        public async Task<int> DeleteMovieAsync(Guid id)
+        public async Task<int> DeletebookAsync(Guid id)
         {
 
             //Get the staff who matches with given Id
-            var product = await _movieContext.Movies
+            var product = await _bookcontext.Books
                                                     .SingleOrDefaultAsync(s => s.Id ==id);
             if (product == null)
             {
                 throw new Exception($"The Staff not found for requested Identifier");
             }
-            _movieContext.Remove(product);
-            await _movieContext.SaveChangesAsync();
+            _bookcontext.Remove(product);
+            await _bookcontext.SaveChangesAsync();
 
             return 1;
         }

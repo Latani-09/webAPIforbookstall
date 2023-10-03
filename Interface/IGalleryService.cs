@@ -8,15 +8,15 @@ namespace webapi.Services
     {
 
 
-        Task<int> CreateMovieAsync(bookDTO book);
+        Task<int> CreatebookAsync(bookDTO book);
 
-        Task<List<Movie>> GetAllMoviesAsync();
+        Task<List<Book>> GetAllbooksAsync();
 
-        Task<Movie> GetMovieAsync(Guid id);
+        Task<Book> GetbookAsync(Guid id);
 
-        Task<bool> UpdateMovieAsync(    bookDTO book);
+        Task<bool> UpdatebookAsync(    bookDTO book);
 
-        Task<int> DeleteMovieAsync(Guid id);
+        Task<int> DeletebookAsync(Guid id);
 
 
     }

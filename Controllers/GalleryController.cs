@@ -25,38 +25,38 @@ namespace webapi.Controllers
             }
 
 
-            [HttpPost("movie")]
+            [HttpPost("book")]
             [AllowAnonymous]
-            public async Task<int> CreateMovieAsync( bookDTO book)
+            public async Task<int> CreatebookAsync( bookDTO book)
             {
-                return await _galleryService.CreateMovieAsync(book);
+                return await _galleryService.CreatebookAsync(book);
             }
 
-            [HttpGet("movie")]
-            public async Task<List<Entities.Movie>> GetAllMoviesAsync()
+            [HttpGet("book")]
+            public async Task<List<Entities.Book>> GetAllbooksAsync()
             {
-                return await _galleryService.GetAllMoviesAsync();
+                return await _galleryService.GetAllbooksAsync();
             }
 
-            [HttpGet("movie/{id}")]
-            public async Task<Entities.Movie> GetMovieAsync(Guid id
+            [HttpGet("book/{id}")]
+            public async Task<Entities.Book> GetbookAsync(Guid id
                 )
             {
-                return await _galleryService.GetMovieAsync(id);
+                return await _galleryService.GetbookAsync(id);
             }
 
-            [HttpPut("movie/{id}")]
+            [HttpPut("book/{id}")]
             [Authorize]
-            public async Task<bool> UpdateMovieAsync([FromBody] bookDTO book)
+            public async Task<bool> UpdatebookAsync([FromBody] bookDTO book)
             {
-                return await _galleryService.UpdateMovieAsync(book);
+                return await _galleryService.UpdatebookAsync(book);
             }
 
-            [HttpDelete("movie/{id}")]
+            [HttpDelete("book/{id}")]
             
-            public async Task<int> DeleteMovieAsync(Guid id)
+            public async Task<int> DeletebookAsync(Guid id)
             {
-                return await _galleryService.DeleteMovieAsync(id);
+                return await _galleryService.DeletebookAsync(id);
             }
     }
 }
