@@ -1,31 +1,27 @@
-using Microsoft.EntityFrameworkCore;
-using webapi.Data;
-using webapi.Interface;
-using webapi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using webapi.Entities;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Hosting;
 using webapi;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.OpenApi.Writers;
-using Microsoft.Identity.Client;
+using webapi.Data;
+using webapi.Entities;
+using webapi.Interface;
+using webapi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddSession(); ;
 var MyAllowSpecificOrigins = "MyAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("https://localhost:4200").AllowAnyOrigin()
+                          policy.WithOrigins("https://localhost:4200")
+                          .AllowCredentials()
                        .AllowAnyHeader()
                        .AllowAnyMethod();
                       });
@@ -37,7 +33,10 @@ builder.Services.AddDbContext<DataContext>(opt =>
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IGalleryService, GalleryService>();
-
+services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None; // or SameSiteMode.Lax
+});
 
 builder.Services.AddIdentityCore<AppUser>(opt =>
 {
@@ -62,9 +61,29 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
 }
     );
+/* builder.Services.AddAuthorization(opt => 
+{
+    opt.AddPolicy("requireAdminRole",
+                policy => policy.RequireRole("Admin","Moderator")
+              );
+});*/
+// Register IDistributedCache with DistributedMemoryCache implementation
+services.AddDistributedMemoryCache();
+
+
+/*services.AddSession(options =>
+{
+    options.Cookie.Name = "CartSession"; // Change to your preferred cookie name
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
+});*/
+// Configure session options
+
+builder.Services .AddHttpContextAccessor();
 var app = builder.Build();
 //to give acces to frontend from api
+
 app.UseCors(MyAllowSpecificOrigins);
+
 using var scope = app.Services.CreateScope();
 var servicesdatacontext = scope.ServiceProvider;
 try
@@ -75,10 +94,15 @@ try
     await context.Database.MigrateAsync();
     await SeedData.Seed(userManager,
                         roleManager);
+    await SeedData.SeedBook(context);
+
 }
-catch (Exception ex) { }
-
-
+catch (Exception ex) {
+    Console.WriteLine(ex);
+        }
+app.UseAuthentication();
+app.UseAuthorization();
+//app.UseSession();
 app.MapControllers();//app.UseAuthorization();
 
 app.Run();

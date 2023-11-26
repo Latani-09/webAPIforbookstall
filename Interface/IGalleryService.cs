@@ -12,11 +12,11 @@ namespace webapi.Services
 
         Task<List<Book>> GetAllbooksAsync();
 
-        Task<Book> GetbookAsync(Guid id);
+        Task<Book> GetbookAsync(int id);
 
         Task<bool> UpdatebookAsync(    bookDTO book);
 
-        Task<int> DeletebookAsync(Guid id);
+        Task<int> DeletebookAsync(int id);
 
 
     }

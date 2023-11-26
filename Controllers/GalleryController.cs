@@ -6,7 +6,7 @@ using webapi.Services;
 
 namespace webapi.Controllers
 {
-    [AllowAnonymous]
+    
     public class GalleryController : BaseAPIController
     
 
@@ -26,7 +26,7 @@ namespace webapi.Controllers
 
 
             [HttpPost("book")]
-            [AllowAnonymous]
+            [Authorize]
             public async Task<int> CreatebookAsync( bookDTO book)
             {
                 return await _galleryService.CreatebookAsync(book);
@@ -39,7 +39,7 @@ namespace webapi.Controllers
             }
 
             [HttpGet("book/{id}")]
-            public async Task<Entities.Book> GetbookAsync(Guid id
+            public async Task<Entities.Book> GetbookAsync(int id
                 )
             {
                 return await _galleryService.GetbookAsync(id);
@@ -54,7 +54,7 @@ namespace webapi.Controllers
 
             [HttpDelete("book/{id}")]
             
-            public async Task<int> DeletebookAsync(Guid id)
+            public async Task<int> DeletebookAsync(int id)
             {
                 return await _galleryService.DeletebookAsync(id);
             }

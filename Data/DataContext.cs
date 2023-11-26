@@ -15,8 +15,9 @@ namespace webapi.Data
         }
         public DbSet<Entities.AppUser> Users { get; set; }
         public DbSet<Entities.Book> Books { get; set; }
-       // public RoleManager<AppRole> roleManager;
-       // public UserManager<AppUser> userManager;
+        public DbSet<Entities.Cartitems> ShoppingCartItems { get; set; }
+        // public RoleManager<AppRole> roleManager;
+        // public UserManager<AppUser> userManager;
         protected override async void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

@@ -26,9 +26,9 @@ namespace webapi.Services
 
             var bookToCreate = new Book
             {
-                Title = book.Title,
-                Author = book.Author,
-                Price = book.Price,
+                title = book.Title,
+                author = book.Author,
+                price = book.Price,
                 year = book.year,
 
 
@@ -43,7 +43,7 @@ namespace webapi.Services
 
         private async Task<bool> isbookExist(string name)
         {
-            return await _bookcontext.Books.AnyAsync(x => x.Title == name);
+            return await _bookcontext.Books.AnyAsync(x => x.title == name);
         }
         public async Task<List<Book>> GetAllbooksAsync()
         {
@@ -66,26 +66,26 @@ namespace webapi.Services
             {
                 throw new Exception("can't add enter valid book name add more details if duplicate exist");
             }
-            tobeUpdated.Title = book.Title;
+            tobeUpdated.title = book.Title;
             _bookcontext.Books.Update(tobeUpdated);
             await _bookcontext.SaveChangesAsync();
 
             return true;
         }
         
-        public async Task<Book> GetbookAsync(Guid id)
+        public async Task<Book> GetbookAsync(int id)
         {
 
             var book = await _bookcontext.Books
                                                     .SingleOrDefaultAsync(s => s.Id== id);
-            Console.WriteLine(book.Title);
+            Console.WriteLine(book.title);
             if (book == null)
             {
                 throw new Exception($"not found ");
             }
             return book;
         }
-        public async Task<int> DeletebookAsync(Guid id)
+        public async Task<int> DeletebookAsync(int id)
         {
 
             //Get the staff who matches with given Id
